@@ -73,7 +73,6 @@ merged_df = pd.merge(
     how='inner'
 )
 
-print(f"Dataset ready! Successfully merged {len(merged_df)} player-seasons.")
 
 # ==========================================
 # STEP 5: TRAIN THE MODEL
@@ -104,12 +103,20 @@ r2 = r2_score(y_test, predictions)
 current_cap = 140588000
 dollar_error = error * current_cap
 
-print("-" * 30)
-print(f"Model Accuracy (R²): {r2:.3f} (1.0 is perfect)")
-print(f"Average Error (Cap %): {error:.2%}")
-print(f"Average Error ($): ${dollar_error:,.0f} (in today's money)")
-print("-" * 30)
-
 # Check Feature Importance (What matters most?)
 importances = pd.DataFrame({'Stat': features, 'Weight': model.feature_importances_})
-print(importances.sort_values(by='Weight', ascending=False))
+
+
+
+# Example: Create a new player to predict
+kuminga_stats = pd.DataFrame({
+    'age': [22], 'g': [35], 'mp': [1050], 
+    'per': [16.1], 'ts_percent': [0.58], 'usg_percent': [24.5], 
+    'ws': [2.5], 'bpm': [0.5], 'vorp': [0.8]
+})
+
+# Get predicted % of cap
+pred_percent = model.predict(kuminga_stats)[0]
+
+# Convert to dollars (using next year's est. cap of $155M)
+print(f"Predicted Salary: ${pred_percent * 166000000:,.0f}")
