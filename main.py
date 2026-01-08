@@ -107,9 +107,9 @@ importances = pd.DataFrame({'Stat': features, 'Weight': model.feature_importance
 
 # Example: Create a new player to predict
 kuminga_stats = pd.DataFrame({
-    'age': [22], 'g': [35], 'mp': [1050], 
-    'per': [16.1], 'ts_percent': [0.58], 'usg_percent': [24.5], 
-    'ws': [2.5], 'bpm': [0.5], 'vorp': [0.8]
+    'age': [21], 'g': [47], 'mp': [1142.1], 
+    'per': [17], 'ts_percent': [0.598], 'usg_percent': [24.1], 
+    'ws': [4.6], 'bpm': [-0.4], 'vorp': [0.8]
 })
 
 # Get predicted % of cap
