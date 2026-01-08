@@ -51,20 +51,19 @@ salary_df['Cap_Percent'] = salary_df['Salary'] / salary_df['Salary_Cap']
 # ==========================================
 stats_df = pd.read_csv('stats.csv')
 
-# Handle Traded Players:
-# If a player has a 'TOT' (Total) row, keep that. If not, keep the row with most games.
+# Handle Traded Players (Logic: Keep 'TOT' row, or row with most games)
 stats_df['is_TOT'] = stats_df['tm'] == 'TOT'
-# Sort so TOT and high games are at the top
 stats_df = stats_df.sort_values(by=['player', 'season', 'is_TOT', 'g'], ascending=[True, True, False, False])
-# Drop duplicates, keeping the top entry (the TOT row)
-stats_cleaned = stats_df.drop_duplicates(subset=['player', 'season'], keep='first')
 
-# ==========================================
-# STEP 4: MERGE (THE TIME SHIFT)
-# ==========================================
-# Logic: Stats from 2023 (season) predict Salary in 2024 (Season)
+# --- THE FIX IS HERE ---
+# We add .copy() to tell Pandas to create a fresh object in memory.
+# This prevents the "SettingWithCopyWarning"
+stats_cleaned = stats_df.drop_duplicates(subset=['player', 'season'], keep='first').copy()
+
+# Now we can safely modify it
 stats_cleaned['Next_Season'] = stats_cleaned['season'] + 1
 
+# Merge Stats (Year X) -> Salary (Year X+1)
 merged_df = pd.merge(
     stats_cleaned,
     salary_df,
@@ -72,8 +71,6 @@ merged_df = pd.merge(
     right_on=['Player', 'Season'],
     how='inner'
 )
-
-
 # ==========================================
 # STEP 5: TRAIN THE MODEL
 # ==========================================
