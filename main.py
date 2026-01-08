@@ -97,7 +97,7 @@ error = mean_absolute_error(y_test, predictions)
 r2 = r2_score(y_test, predictions)
 
 # Convert error to 2025 dollars for context
-current_cap = 140588000
+current_cap = 154647000
 dollar_error = error * current_cap
 
 # Check Feature Importance (What matters most?)
@@ -105,7 +105,6 @@ importances = pd.DataFrame({'Stat': features, 'Weight': model.feature_importance
 
 
 
-# Example: Create a new player to predict
 kuminga_stats = pd.DataFrame({
     'age': [21], 'g': [47], 'mp': [1142.1], 
     'per': [17], 'ts_percent': [0.598], 'usg_percent': [24.1], 
@@ -115,5 +114,5 @@ kuminga_stats = pd.DataFrame({
 # Get predicted % of cap
 pred_percent = model.predict(kuminga_stats)[0]
 
-# Convert to dollars (using next year's est. cap of $155M)
+# Convert to dollars
 print(f"Predicted Salary: ${pred_percent * 166000000:,.0f}")
